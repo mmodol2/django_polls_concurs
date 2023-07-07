@@ -1,0 +1,20 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+
+<h1>EnquestesOnline.com</h1>
+<h3>Resultat del concurs d'enquestes:</h3>
+
+{% if question_list %}
+    <table class="taula_concurs">
+        <thead><th>Posició</th><th>Pregunta</th><th> Total vots</th><th> Autor enquesta</th></thead>
+        {% for question, votes in ll_preguntes_vots %}
+        <tr><td>{{ forloop.counter }}</td><td>{{ question.question_text }} </td><td> {{ votes }}</td><td>{{ question.user.username }}</td></tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>Sense dades.</p>
+{% endif %}
+<br>
+<a href="{% url 'polls:index' %}">Torna a plana Principal</a>

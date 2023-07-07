@@ -1,0 +1,23 @@
+
+body {
+    background: white url("images/background.jpg") no-repeat;
+}
+
+li a {
+    color: green;
+}
+
+#chart-container {
+    position: relative;
+}
+  
+canvas#myPieChart {
+position: absolute;
+top: 25%;
+right: 25%;
+}
+
+.taula_concurs table, th, td {
+    padding: 20;
+    background-color: hotpink;
+}

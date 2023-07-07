@@ -1,0 +1,22 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+<div style="float: right;"><a href="/admin" target="_blank">Administració</a></div>
+<h1>EnquestesOnline.com</h1>
+<h3>Tria enquesta a respondre:</h3>
+{% if latest_question_list %}
+    <ul>
+    {% for question in latest_question_list %}
+        <!-- <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li> -->
+        <!-- polls:detail per que ara a url li hem donat nom a l'app-->
+        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a> per {{question.user}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Sense enquestes.</p>
+{% endif %}
+
+<h3>El concurs de les enquestes!!</h3>
+
+<a href="{% url 'polls:concurs' %}">Vols veure qui és el guanyador de l'enquesta més votada?</a> </li>
