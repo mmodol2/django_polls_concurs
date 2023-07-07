@@ -1,14 +1,15 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
 from django.template import loader
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.views import generic
 from django.db.models import Sum
 
 from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from .models import Choice, Question
 
@@ -44,6 +45,26 @@ class ConcursView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['ll_preguntes_vots'] = [(question, question.total_votes) for question in context['object_list']]
         return context
+
+
+
+class DatosGraficaAPIView(APIView):
+    def get(self, request, pk):
+        question = Question.objects.get(pk=pk)
+        choices = question.choice_set.all()
+
+        labels = []
+        values = []
+        for choice in choices:
+            labels.append(choice.choice_text)
+            values.append(choice.votes)
+
+        data = {            'labels': labels,
+                            'values': values,       }
+
+        return Response(data)
+    
+
 
 # def index(request):
 #     # latest_question_list = Question.objects.order_by("-pub_date")[:5]

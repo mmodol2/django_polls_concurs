@@ -2,6 +2,7 @@ from django.urls import path
 from .views import obtener_datos_grafica
 
 from . import views
+from .views import DatosGraficaAPIView
 
 app_name = "polls"
 
@@ -12,6 +13,7 @@ urlpatterns = [
     path("<int:pk>/results/", views.ResultsView.as_view(), name="results"),
     path("<int:question_id>/vote/", views.vote, name="vote"),
     path('question/<int:question_id>/obtener-datos-grafica/', obtener_datos_grafica, name='obtener_datos_grafica'),
+    path('api/question/<int:pk>/datos-grafica/', DatosGraficaAPIView.as_view(), name='datos_grafica_api'),
 ]
 
 # urlpatterns = [    

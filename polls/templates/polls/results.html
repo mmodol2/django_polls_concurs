@@ -18,30 +18,63 @@
 </div>
     
 <script>
-    $.ajax({
-      url: "{% url 'polls:obtener_datos_grafica' question.id %}",
-      method: "GET",
-      success: function(data) {
-        var labels = data.labels;
-        var values = data.values;
+  var questionId = "{{ question.id }}";
+  var url = "{% url 'polls:datos_grafica_api' question.id %}";
+
+  $.ajax({
+    url: url,
+    method: "GET",
+    success: function(data) {
+      // Datos recibidos en la respuesta AJAX
+      var labels = data.labels;
+      var values = data.values;
+
+      // Crea la gráfica de quesito con los datos recibidos
+      var ctx = document.getElementById('myPieChart').getContext('2d');
+      var chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: values,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+              // ... más colores de fondo si es necesario
+            ],
+          }],
+        },
+      });
+    }
+  });
+
+
+    // $.ajax({
+    //   url: "{% url 'polls:obtener_datos_grafica' question.id %}",
+    //   method: "GET",
+    //   success: function(data) {
+    //     var labels = data.labels;
+    //     var values = data.values;
   
-        var ctx = document.getElementById('myPieChart').getContext('2d');
-        var chart = new Chart(ctx, {
-          type: 'pie',
-          data: {
-            labels: labels,
-            datasets: [{
-              data: values,
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 206, 86, 0.7)',
-              ],
-            }],
-          },
-        });
-      }
-    });
-  </script>
+    //     var ctx = document.getElementById('myPieChart').getContext('2d');
+    //     var chart = new Chart(ctx, {
+    //       type: 'pie',
+    //       data: {
+    //         labels: labels,
+    //         datasets: [{
+    //           data: values,
+    //           backgroundColor: [
+    //             'rgba(255, 99, 132, 0.7)',
+    //             'rgba(54, 162, 235, 0.7)',
+    //             'rgba(255, 206, 86, 0.7)',
+    //           ],
+    //         }],
+    //       },
+    //     });
+    //   }
+    // });
+
+</script>
 
 {% endblock %}
