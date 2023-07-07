@@ -1,3 +1,7 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+
 <h1>{{ question.question_text }}</h1>
 
 <ul>
@@ -6,4 +10,38 @@
 {% endfor %}
 </ul>
 
+
 <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+
+<div id="chart-container" style="position: relative; width: 500px; height: 400px;">
+    <canvas id="myPieChart" ></canvas>
+</div>
+    
+<script>
+    $.ajax({
+      url: "{% url 'polls:obtener_datos_grafica' question.id %}",
+      method: "GET",
+      success: function(data) {
+        var labels = data.labels;
+        var values = data.values;
+  
+        var ctx = document.getElementById('myPieChart').getContext('2d');
+        var chart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: values,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+              ],
+            }],
+          },
+        });
+      }
+    });
+  </script>
+
+{% endblock %}

@@ -8,6 +8,8 @@ from django.template import loader
 from django.views import generic
 from django.db.models import Sum
 
+from django.http import JsonResponse
+
 from .models import Choice, Question
 
 class IndexView(generic.ListView):
@@ -65,13 +67,14 @@ class ConcursView(generic.ListView):
 
 #     # return HttpResponse("You're looking at question %s." % question_id)
 
-
 # def results(request, question_id):
 #     # response = "You're looking at the results of question %s."
 #     # return HttpResponse(response % question_id)
 #     question = get_object_or_404(Question, pk=question_id)
 #     return render(request, "polls/results.html", {"question": question})
 
+
+# captura el vot sense classes
 def vote(request, question_id):
     # return HttpResponse("You're voting on question %s." % question_id)
     question = get_object_or_404(Question, pk=question_id)
@@ -92,3 +95,21 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+
+
+def obtener_datos_grafica(request, question_id):
+    question = Question.objects.get(id=question_id)
+    choices = question.choice_set.all()
+
+    labels = []
+    values = []
+    for choice in choices:
+        labels.append(choice.choice_text)
+        values.append(choice.votes)
+
+    data = {
+        'labels': labels,
+        'values': values,
+    }
+
+    return JsonResponse(data)
